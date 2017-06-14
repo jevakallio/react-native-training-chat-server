@@ -8,25 +8,54 @@ const normalizeChannelName = channel => (channel || 'default').toLowerCase();
 /**
  * Send a message
  */
-export const send = ({channel, sender, message}) => {
+export const send = ({channel, sender, message, avatar = null}) => {
   return Firebase.database()
     .ref(normalizeChannelName(channel))
-    .push({sender, message});
+    .push({sender, message, avatar});
 };
 
 /**
  * Subscribe to message updates
  */
-export const subscribe = (channel, callback) => {
-  Firebase.database()
-    .ref(normalizeChannelName(channel))
-    .on('value', snapshot => {
-      const data = snapshot.val();
-      const messages = [];
-      for (const key in data) {
-        messages.push({key, ...data[key]});
-      }
 
-      callback(messages);
-    });
+let currentQuery;
+let currentCallback;
+
+export const subscribe = (channel, callback, maxMessages = 100) => {
+  if (!channel) {
+    throw new Error('Channel name required!');
+  }
+
+  if (!callback) {
+    throw new Error('A subscription callback required!');
+  }
+
+  // only allow a single subscription at once,
+  // unsubscribe from previous rooms
+  if (currentQuery && currentCallback) {
+    currentQuery.off('value', currentCallback);
+    currentQuery = null;
+    currentCallback = null;
+  }
+
+  currentQuery = Firebase.database()
+    .ref(normalizeChannelName(channel))
+    .limitToLast(maxMessages);
+  currentCallback = callback;
+
+  currentQuery.on('value', snapshot => {
+    const data = snapshot.val();
+    const messages = [];
+    for (const key in data) {
+      const {sender, message, avatar} = data[key];
+      messages.push({
+        key,
+        sender,
+        message,
+        avatar: avatar || 'http://i.imgur.com/h5mhz8A.png',
+      });
+    }
+
+    callback(messages);
+  });
 };
