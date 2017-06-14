@@ -1,6 +1,6 @@
 {
   "name": "react-native-training-chat-server",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "A client library for a chat server to be used in React Native training",
   "main": "index.js",
   "scripts": {
