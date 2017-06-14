@@ -9,9 +9,10 @@ const normalizeChannelName = channel => (channel || 'default').toLowerCase();
  * Send a message
  */
 export const send = ({channel, sender, message, avatar = null}) => {
+  const timestamp = new Date().toISOString();
   return Firebase.database()
     .ref(normalizeChannelName(channel))
-    .push({sender, message, avatar});
+    .push({sender, message, avatar, timestamp});
 };
 
 /**
@@ -47,11 +48,12 @@ export const subscribe = (channel, callback, maxMessages = 100) => {
     const data = snapshot.val();
     const messages = [];
     for (const key in data) {
-      const {sender, message, avatar} = data[key];
+      const {sender, message, avatar, timestamp} = data[key];
       messages.push({
         key,
         sender,
         message,
+        timestamp: timestamp ? new Date(timestamp) : new Date(2000, 0, 1),
         avatar: avatar || 'http://i.imgur.com/h5mhz8A.png',
       });
     }
