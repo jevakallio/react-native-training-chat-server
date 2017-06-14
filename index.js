@@ -8,7 +8,19 @@ const normalizeChannelName = channel => (channel || 'default').toLowerCase();
 /**
  * Send a message
  */
-export const send = ({channel, sender, message, avatar = null}) => {
+export const send = ({
+  channel,
+  sender = 'Anonymous',
+  message = null,
+  avatar = null,
+}) => {
+  if (message === '') {
+    return Promise.resolve();
+  }
+  if (message === null) {
+    throw new Error('A message body is required');
+  }
+
   const timestamp = new Date().toISOString();
   return Firebase.database()
     .ref(normalizeChannelName(channel))
