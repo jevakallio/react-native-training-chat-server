@@ -1,21 +1,25 @@
 {
   "name": "react-native-training-chat-server",
-  "version": "1.1.2",
-  "description": "A client library for a chat server to be used in React Native training",
+  "version": "2.0.0",
+  "description":
+    "A client library for a chat server to be used in React Native training",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/jevakallio/react-native-training-chat-server.git"
+    "url":
+      "git+https://github.com/jevakallio/react-native-training-chat-server.git"
   },
   "author": "",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/jevakallio/react-native-training-chat-server/issues"
+    "url":
+      "https://github.com/jevakallio/react-native-training-chat-server/issues"
   },
-  "homepage": "https://github.com/jevakallio/react-native-training-chat-server#readme",
+  "homepage":
+    "https://github.com/jevakallio/react-native-training-chat-server#readme",
   "dependencies": {
     "firebase": "^4.1.2"
   }

@@ -12,7 +12,7 @@ export const send = ({
   channel,
   sender = 'Anonymous',
   message = null,
-  avatar = null,
+  avatar = null
 }) => {
   if (message === '') {
     return Promise.resolve();
@@ -24,7 +24,7 @@ export const send = ({
   const timestamp = new Date().toISOString();
   return Firebase.database()
     .ref(normalizeChannelName(channel))
-    .push({sender, message, avatar, timestamp});
+    .push({ sender, message, avatar, timestamp });
 };
 
 /**
@@ -60,13 +60,13 @@ export const subscribe = (channel, callback, maxMessages = 100) => {
     const data = snapshot.val();
     const messages = [];
     for (const key in data) {
-      const {sender, message, avatar, timestamp} = data[key];
-      messages.push({
+      const { sender, message, avatar, timestamp } = data[key];
+      messages.unshift({
         key,
         sender,
         message,
         timestamp: timestamp ? new Date(timestamp) : new Date(2000, 0, 1),
-        avatar: avatar || 'http://i.imgur.com/h5mhz8A.png',
+        avatar: avatar || 'http://i.imgur.com/h5mhz8A.png'
       });
     }
 
